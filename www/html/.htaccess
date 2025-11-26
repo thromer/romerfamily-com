@@ -1,0 +1,19 @@
+#
+# 403 if a directory listing leaks through the below
+#
+Options -Indexes
+
+# 
+# 404 on requests for foo/ if foo/index.html does not exist
+#
+RewriteEngine On
+RewriteBase /
+
+# Check if the request is specifically for a directory
+RewriteCond %{REQUEST_FILENAME} -d
+
+# Check if index.html is missing inside that requested directory
+RewriteCond %{REQUEST_FILENAME}/index.html !-f
+
+# If both are true, force a 404 Not Found
+RewriteRule ^ - [R=404,L]
